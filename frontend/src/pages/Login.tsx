@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-
+import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 
 
@@ -20,10 +20,18 @@ const Login = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const { login, isLoggedIn, isLoading } = useAuth();
+    const { toast } = useToast();
     const navigate = useNavigate();
 
     const onSubmit = () => {
-        login(email, password);
+        if (email && password) {
+            login(email, password);
+        } else {
+            toast({
+                variant: "destructive",
+                title: "All the fields are mandatory",
+            });
+        }
     };
 
     useEffect(() => {

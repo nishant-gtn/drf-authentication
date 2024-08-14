@@ -15,6 +15,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Loader2 } from "lucide-react";
 
 
 export const description =
@@ -34,37 +35,49 @@ const ResetPassword = () => {
 
 
     const onSubmit = async () => {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
+        if (email) {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
 
-        const body = JSON.stringify({ email });
-        setIsLoading(true);
-        try {
-            const response = await axios.post('/api/auth/users/reset_password/', body, config);
-            console.log('response: ', response);
-            setIsOpen(true);
-        } catch (error: unknown) {
-            console.log('error:', error)
-            setIsLoading(false);
-            if (isAxiosError(error)) {
-                toast({
-                    variant: "destructive",
-                    title: "Reset Failed",
-                    description: error.response?.data.detail,
-                });
-            } else {
-                toast({
-                    variant: "destructive",
-                    title: "Reset Failed",
-                    description: (error as Error).message,
-                });
+            const body = JSON.stringify({ email });
+            setIsLoading(true);
+            try {
+                const response = await axios.post('/api/auth/users/reset_password/', body, config);
+                console.log('response: ', response);
+                setIsOpen(true);
+            } catch (error: unknown) {
+                console.log('error:', error)
+                setIsLoading(false);
+                if (isAxiosError(error)) {
+                    toast({
+                        variant: "destructive",
+                        title: "Reset Failed",
+                        description: error.response?.data.detail,
+                    });
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: "Reset Failed",
+                        description: (error as Error).message,
+                    });
+                }
             }
+            setIsLoading(false);
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Email is required",
+            });
         }
-        setIsLoading(false);
     };
+
+    const handleConfirm = () => {
+        setIsOpen(false);
+        navigate('/login');
+    }
 
     return (
         <>
@@ -98,9 +111,16 @@ const ResetPassword = () => {
                                     required
                                 />
                             </div>
-                            <Button type="submit" className="w-full" onClick={onSubmit}>
-                                Reset
-                            </Button>
+                            {isLoading ?
+                                <Button disabled type="submit" className="w-full" onClick={onSubmit}>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Please Wait
+                                </Button>
+                                :
+                                <Button type="submit" className="w-full" onClick={onSubmit}>
+                                    Reset
+                                </Button>
+                            }
                         </div>
                         <div className="mt-4 text-center text-sm">
                             Don&apos;t have an account?{" "}
@@ -120,7 +140,7 @@ const ResetPassword = () => {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogAction onClick={() => setIsOpen(false)}>Continue</AlertDialogAction>
+                        <AlertDialogAction onClick={handleConfirm}>Continue</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

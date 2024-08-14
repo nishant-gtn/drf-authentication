@@ -81,7 +81,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                withCredentials: true,
             };
             const response = await axios.post('/api/auth/jwt/create/', { email, password }, config);
             setValues(true, response.data.access, response.data.refresh);
