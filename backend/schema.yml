@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Learning Django Rest Framework
+  title: Learning Django REST
   version: 0.0.0
 paths:
   /api/auth/jwt/create/:
@@ -10,26 +10,26 @@ paths:
         Takes a set of user credentials and returns an access and refresh JSON web
         token pair to prove the authentication of those credentials.
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TokenObtainPair"
+              $ref: '#/components/schemas/TokenObtainPair'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/TokenObtainPair"
+              $ref: '#/components/schemas/TokenObtainPair'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/TokenObtainPair"
+              $ref: '#/components/schemas/TokenObtainPair'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TokenObtainPair"
-          description: ""
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
   /api/auth/jwt/refresh/:
     post:
       operationId: api_auth_jwt_refresh_create
@@ -37,26 +37,26 @@ paths:
         Takes a refresh type JSON web token and returns an access type JSON web
         token if the refresh token is valid.
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TokenRefresh"
+              $ref: '#/components/schemas/TokenRefresh'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/TokenRefresh"
+              $ref: '#/components/schemas/TokenRefresh'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/TokenRefresh"
+              $ref: '#/components/schemas/TokenRefresh'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TokenRefresh"
-          description: ""
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
   /api/auth/jwt/verify/:
     post:
       operationId: api_auth_jwt_verify_create
@@ -64,454 +64,1315 @@ paths:
         Takes a token and indicates if it is valid.  This view provides no
         information about a token's fitness for a particular use.
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TokenVerify"
+              $ref: '#/components/schemas/TokenVerify'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/TokenVerify"
+              $ref: '#/components/schemas/TokenVerify'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/TokenVerify"
+              $ref: '#/components/schemas/TokenVerify'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TokenVerify"
-          description: ""
+                $ref: '#/components/schemas/TokenVerify'
+          description: ''
+  /api/auth/o/{provider}/:
+    get:
+      operationId: api_auth_o_retrieve
+      parameters:
+      - in: path
+        name: provider
+        schema:
+          type: string
+          pattern: ^\S+$
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAuth'
+          description: ''
+    post:
+      operationId: api_auth_o_create
+      parameters:
+      - in: path
+        name: provider
+        schema:
+          type: string
+          pattern: ^\S+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderAuth'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProviderAuth'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProviderAuth'
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAuth'
+          description: ''
   /api/auth/users/:
     get:
       operationId: api_auth_users_list
       tags:
-        - api
+      - api
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/UserCreate"
-          description: ""
+                  $ref: '#/components/schemas/UserCreate'
+          description: ''
     post:
       operationId: api_auth_users_create
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserCreatePasswordRetype"
+              $ref: '#/components/schemas/UserCreatePasswordRetype'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/UserCreatePasswordRetype"
+              $ref: '#/components/schemas/UserCreatePasswordRetype'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/UserCreatePasswordRetype"
+              $ref: '#/components/schemas/UserCreatePasswordRetype'
         required: true
       security:
-        - jwtAuth: []
-        - {}
+      - jwtAuth: []
+      - {}
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserCreatePasswordRetype"
-          description: ""
+                $ref: '#/components/schemas/UserCreatePasswordRetype'
+          description: ''
   /api/auth/users/{id}/:
     get:
       operationId: api_auth_users_retrieve
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: A unique integer value identifying this user account.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user account.
+        required: true
       tags:
-        - api
+      - api
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserCreate"
-          description: ""
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
     put:
       operationId: api_auth_users_update
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: A unique integer value identifying this user account.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user account.
+        required: true
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserCreate"
+              $ref: '#/components/schemas/UserCreate'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/UserCreate"
+              $ref: '#/components/schemas/UserCreate'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/UserCreate"
+              $ref: '#/components/schemas/UserCreate'
         required: true
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserCreate"
-          description: ""
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
     patch:
       operationId: api_auth_users_partial_update
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: A unique integer value identifying this user account.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user account.
+        required: true
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PatchedUserCreate"
+              $ref: '#/components/schemas/PatchedUserCreate'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/PatchedUserCreate"
+              $ref: '#/components/schemas/PatchedUserCreate'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/PatchedUserCreate"
+              $ref: '#/components/schemas/PatchedUserCreate'
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserCreate"
-          description: ""
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
     delete:
       operationId: api_auth_users_destroy
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: A unique integer value identifying this user account.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user account.
+        required: true
       tags:
-        - api
+      - api
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "204":
+        '204':
           description: No response body
   /api/auth/users/activation/:
     post:
       operationId: api_auth_users_activation_create
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Activation"
+              $ref: '#/components/schemas/Activation'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/Activation"
+              $ref: '#/components/schemas/Activation'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/Activation"
+              $ref: '#/components/schemas/Activation'
         required: true
       security:
-        - jwtAuth: []
-        - {}
+      - jwtAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Activation"
-          description: ""
+                $ref: '#/components/schemas/Activation'
+          description: ''
   /api/auth/users/me/:
     get:
       operationId: api_auth_users_me_retrieve
       tags:
-        - api
+      - api
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-          description: ""
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
     put:
       operationId: api_auth_users_me_update
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: '#/components/schemas/UserCreate'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: '#/components/schemas/UserCreate'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: '#/components/schemas/UserCreate'
         required: true
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-          description: ""
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
     patch:
       operationId: api_auth_users_me_partial_update
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PatchedUser"
+              $ref: '#/components/schemas/PatchedUserCreate'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/PatchedUser"
+              $ref: '#/components/schemas/PatchedUserCreate'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/PatchedUser"
+              $ref: '#/components/schemas/PatchedUserCreate'
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-          description: ""
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
     delete:
       operationId: api_auth_users_me_destroy
       tags:
-        - api
+      - api
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "204":
+        '204':
           description: No response body
   /api/auth/users/resend_activation/:
     post:
       operationId: api_auth_users_resend_activation_create
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendEmailReset"
+              $ref: '#/components/schemas/SendEmailReset'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/SendEmailReset"
+              $ref: '#/components/schemas/SendEmailReset'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/SendEmailReset"
+              $ref: '#/components/schemas/SendEmailReset'
         required: true
       security:
-        - jwtAuth: []
-        - {}
+      - jwtAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SendEmailReset"
-          description: ""
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
   /api/auth/users/reset_email/:
     post:
       operationId: api_auth_users_reset_email_create
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendEmailReset"
+              $ref: '#/components/schemas/SendEmailReset'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/SendEmailReset"
+              $ref: '#/components/schemas/SendEmailReset'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/SendEmailReset"
+              $ref: '#/components/schemas/SendEmailReset'
         required: true
       security:
-        - jwtAuth: []
-        - {}
+      - jwtAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SendEmailReset"
-          description: ""
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
   /api/auth/users/reset_email_confirm/:
     post:
       operationId: api_auth_users_reset_email_confirm_create
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UsernameResetConfirm"
+              $ref: '#/components/schemas/UsernameResetConfirm'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/UsernameResetConfirm"
+              $ref: '#/components/schemas/UsernameResetConfirm'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/UsernameResetConfirm"
+              $ref: '#/components/schemas/UsernameResetConfirm'
         required: true
       security:
-        - jwtAuth: []
-        - {}
+      - jwtAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UsernameResetConfirm"
-          description: ""
+                $ref: '#/components/schemas/UsernameResetConfirm'
+          description: ''
   /api/auth/users/reset_password/:
     post:
       operationId: api_auth_users_reset_password_create
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendEmailReset"
+              $ref: '#/components/schemas/SendEmailReset'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/SendEmailReset"
+              $ref: '#/components/schemas/SendEmailReset'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/SendEmailReset"
+              $ref: '#/components/schemas/SendEmailReset'
         required: true
       security:
-        - jwtAuth: []
-        - {}
+      - jwtAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SendEmailReset"
-          description: ""
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
   /api/auth/users/reset_password_confirm/:
     post:
       operationId: api_auth_users_reset_password_confirm_create
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PasswordResetConfirm"
+              $ref: '#/components/schemas/PasswordResetConfirmRetype'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/PasswordResetConfirm"
+              $ref: '#/components/schemas/PasswordResetConfirmRetype'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/PasswordResetConfirm"
+              $ref: '#/components/schemas/PasswordResetConfirmRetype'
         required: true
       security:
-        - jwtAuth: []
-        - {}
+      - jwtAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PasswordResetConfirm"
-          description: ""
+                $ref: '#/components/schemas/PasswordResetConfirmRetype'
+          description: ''
   /api/auth/users/set_email/:
     post:
       operationId: api_auth_users_set_email_create
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SetUsernameRetype"
+              $ref: '#/components/schemas/SetUsernameRetype'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/SetUsernameRetype"
+              $ref: '#/components/schemas/SetUsernameRetype'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/SetUsernameRetype"
+              $ref: '#/components/schemas/SetUsernameRetype'
         required: true
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SetUsernameRetype"
-          description: ""
+                $ref: '#/components/schemas/SetUsernameRetype'
+          description: ''
   /api/auth/users/set_password/:
     post:
       operationId: api_auth_users_set_password_create
       tags:
-        - api
+      - api
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SetPasswordRetype"
+              $ref: '#/components/schemas/SetPasswordRetype'
           application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/SetPasswordRetype"
+              $ref: '#/components/schemas/SetPasswordRetype'
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/SetPasswordRetype"
+              $ref: '#/components/schemas/SetPasswordRetype'
         required: true
       security:
-        - jwtAuth: []
+      - jwtAuth: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SetPasswordRetype"
-          description: ""
+                $ref: '#/components/schemas/SetPasswordRetype'
+          description: ''
+  /api/blogs/:
+    get:
+      operationId: api_blogs_list
+      description: List all blogs, or create a new blog.
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Blog'
+          description: ''
+    post:
+      operationId: api_blogs_create
+      description: List all blogs, or create a new blog.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Blog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+  /api/blogs/{format}:
+    get:
+      operationId: api_blogs_formatted_list
+      description: List all blogs, or create a new blog.
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Blog'
+          description: ''
+    post:
+      operationId: api_blogs_formatted_create
+      description: List all blogs, or create a new blog.
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Blog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+  /api/blogs/{id}/:
+    get:
+      operationId: api_blogs_retrieve
+      description: Retrieve, Update or Delete Blog instance
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+    put:
+      operationId: api_blogs_update
+      description: Retrieve, Update or Delete Blog instance
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Blog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+    patch:
+      operationId: api_blogs_partial_update
+      description: Retrieve, Update or Delete Blog instance
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBlog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBlog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBlog'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+    delete:
+      operationId: api_blogs_destroy
+      description: Retrieve, Update or Delete Blog instance
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/blogs/{id}{format}:
+    get:
+      operationId: api_blogs_formatted_retrieve
+      description: Retrieve, Update or Delete Blog instance
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+    put:
+      operationId: api_blogs_formatted_update
+      description: Retrieve, Update or Delete Blog instance
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Blog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Blog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+    patch:
+      operationId: api_blogs_formatted_partial_update
+      description: Retrieve, Update or Delete Blog instance
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBlog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBlog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBlog'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+          description: ''
+    delete:
+      operationId: api_blogs_formatted_destroy
+      description: Retrieve, Update or Delete Blog instance
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/blogs/category/:
+    get:
+      operationId: api_blogs_category_list
+      description: List all categories, or create a new category.
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: ''
+    post:
+      operationId: api_blogs_category_create
+      description: List all categories, or create a new category.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/blogs/category{format}:
+    get:
+      operationId: api_blogs_category_formatted_list
+      description: List all categories, or create a new category.
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: ''
+    post:
+      operationId: api_blogs_category_formatted_create
+      description: List all categories, or create a new category.
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/blogs/category/{id}/:
+    get:
+      operationId: api_blogs_category_retrieve
+      description: Retrieve, update or delete a category instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: api_blogs_category_update
+      description: Retrieve, update or delete a category instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: api_blogs_category_partial_update
+      description: Retrieve, update or delete a category instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: api_blogs_category_destroy
+      description: Retrieve, update or delete a category instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/blogs/category/{id}{format}:
+    get:
+      operationId: api_blogs_category_formatted_retrieve
+      description: Retrieve, update or delete a category instance.
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: api_blogs_category_formatted_update
+      description: Retrieve, update or delete a category instance.
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: api_blogs_category_formatted_partial_update
+      description: Retrieve, update or delete a category instance.
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: api_blogs_category_formatted_destroy
+      description: Retrieve, update or delete a category instance.
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
 components:
   schemas:
     Activation:
@@ -522,9 +1383,54 @@ components:
         token:
           type: string
       required:
-        - token
-        - uid
-    PasswordResetConfirm:
+      - token
+      - uid
+    Blog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        author:
+          type: integer
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        categories:
+          type: array
+          items:
+            type: integer
+      required:
+      - author
+      - categories
+      - content
+      - created_at
+      - id
+      - title
+      - updated_at
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+      required:
+      - id
+      - name
+    PasswordResetConfirmRetype:
       type: object
       properties:
         uid:
@@ -533,23 +1439,47 @@ components:
           type: string
         new_password:
           type: string
+        re_new_password:
+          type: string
       required:
-        - new_password
-        - token
-        - uid
-    PatchedUser:
+      - new_password
+      - re_new_password
+      - token
+      - uid
+    PatchedBlog:
       type: object
       properties:
-        name:
-          type: string
-          maxLength: 255
         id:
           type: integer
           readOnly: true
-        email:
+        title:
           type: string
-          format: email
+          maxLength: 255
+        content:
+          type: string
+        author:
+          type: integer
+        updated_at:
+          type: string
+          format: date-time
           readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        categories:
+          type: array
+          items:
+            type: integer
+    PatchedCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
     PatchedUserCreate:
       type: object
       properties:
@@ -560,12 +1490,33 @@ components:
           type: string
           format: email
           maxLength: 255
-        name:
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
           type: string
           maxLength: 255
         password:
           type: string
           writeOnly: true
+        is_superuser:
+          type: boolean
+    ProviderAuth:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+        user:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+      - user
     SendEmailReset:
       type: object
       properties:
@@ -573,7 +1524,7 @@ components:
           type: string
           format: email
       required:
-        - email
+      - email
     SetPasswordRetype:
       type: object
       properties:
@@ -584,9 +1535,9 @@ components:
         current_password:
           type: string
       required:
-        - current_password
-        - new_password
-        - re_new_password
+      - current_password
+      - new_password
+      - re_new_password
     SetUsernameRetype:
       type: object
       properties:
@@ -600,9 +1551,9 @@ components:
         re_new_email:
           type: string
       required:
-        - current_password
-        - new_email
-        - re_new_email
+      - current_password
+      - new_email
+      - re_new_email
     TokenObtainPair:
       type: object
       properties:
@@ -619,10 +1570,10 @@ components:
           type: string
           readOnly: true
       required:
-        - access
-        - email
-        - password
-        - refresh
+      - access
+      - email
+      - password
+      - refresh
     TokenRefresh:
       type: object
       properties:
@@ -633,8 +1584,8 @@ components:
           type: string
           writeOnly: true
       required:
-        - access
-        - refresh
+      - access
+      - refresh
     TokenVerify:
       type: object
       properties:
@@ -642,24 +1593,7 @@ components:
           type: string
           writeOnly: true
       required:
-        - token
-    User:
-      type: object
-      properties:
-        name:
-          type: string
-          maxLength: 255
-        id:
-          type: integer
-          readOnly: true
-        email:
-          type: string
-          format: email
-          readOnly: true
-      required:
-        - email
-        - id
-        - name
+      - token
     UserCreate:
       type: object
       properties:
@@ -670,21 +1604,30 @@ components:
           type: string
           format: email
           maxLength: 255
-        name:
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
           type: string
           maxLength: 255
         password:
           type: string
           writeOnly: true
+        is_superuser:
+          type: boolean
       required:
-        - email
-        - id
-        - name
-        - password
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
     UserCreatePasswordRetype:
       type: object
       properties:
-        name:
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
           type: string
           maxLength: 255
         email:
@@ -700,11 +1643,12 @@ components:
         re_password:
           type: string
       required:
-        - email
-        - id
-        - name
-        - password
-        - re_password
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+      - re_password
     UsernameResetConfirm:
       type: object
       properties:
@@ -714,7 +1658,7 @@ components:
           title: Email
           maxLength: 255
       required:
-        - new_email
+      - new_email
   securitySchemes:
     jwtAuth:
       type: apiKey
