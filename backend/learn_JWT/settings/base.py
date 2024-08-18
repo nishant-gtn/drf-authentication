@@ -176,7 +176,7 @@ SIMPLE_JWT = {
     ),
 }
 
-DOMAIN = os.environ.get('FRONTEND_URL')
+DOMAIN = os.environ.get('DOMAIN')
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
@@ -211,3 +211,15 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'openid',
 ]
 SOCIAL_AUTH_GOOGLE_OAUTH_AUTH_EXTRA_DATA = ['first_name', 'last_name']
+
+
+# Additional SOCs
+SECURE_BROWSER_XSS_FILTER = True        # block XSS attack
+SECURE_CONTENT_TYPE_NOSNIFF = True      # prevent MIME-type confusion attack
+X_FRAME_OPTIONS = 'DENY'                # prevent site iframe
+# SECURE_HSTS_SECONDS = 3600              # only access HTTPS for 3600secs
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True   # force all subdomain to use HTTPS
+# SECURE_HSTS_PRELOAD = True              # include site in browsers' HSTS preload lists
+# SECURE_SSL_REDIRECT = True              # force HTTP to HTTPS
+# SESSION_COOKIE_SECURE = True            # prevent cookies in HTTP
+# CSRF_COOKIE_SECURE = True               # CSRF over HTTPS only

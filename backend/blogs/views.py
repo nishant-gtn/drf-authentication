@@ -7,27 +7,20 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Category, Blog
 from .serializers import CategorySerializer, BlogSerializer
 from .permissions import IsOwnerOrReadOnly, IsAdminOrReadOnly
+from django.utils.decorators import method_decorator
+from django_ratelimit.decorators import ratelimit
 
-# class CategoryList(APIView):
+
+@method_decorator(ratelimit(key='ip', rate='2/m', block=True), name='dispatch')
 class CategoryList(generics.ListCreateAPIView):
     """
     List all categories, or create a new category.
     """
-    # def get(self, request, format=None):
-    #     categories = Category.objects.all()
-    #     serializer = CategorySerializer(categories, many=True)
-    #     return Response(serializer.data)
-
-    # def post(self, request, format=None):
-    #     serializer = CategorySerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAdminOrReadOnly]
+
 
 
 # class CategoryDetail(APIView):
